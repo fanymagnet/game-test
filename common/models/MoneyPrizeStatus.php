@@ -15,6 +15,21 @@ use Yii;
 class MoneyPrizeStatus extends \yii\db\ActiveRecord
 {
     /**
+     * Отказ от призы
+     */
+    public const DENIED = 1;
+
+    /**
+     * Сконвертировано в бонусные баллы
+     */
+    public const CONVERT_TO_BONUS = 2;
+
+    /**
+     * Переведено в банк
+     */
+    public const TRANSFER_TO_BANK = 3;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()

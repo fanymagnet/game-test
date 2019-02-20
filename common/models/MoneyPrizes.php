@@ -71,4 +71,33 @@ class MoneyPrizes extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Prizes::className(), ['id' => 'prize_id']);
     }
+
+    /**
+     * Получить определённое количество призов для отправки в банк
+     * @param int $limit количество отбираемых призов
+     * @return array
+     */
+    public static function getNotSentToBank(int $limit): array
+    {
+        return static::find()
+            ->where([
+                'status' => MoneyPrizeStatus::TRANSFER_TO_BANK,
+                'is_sent_to_bank' => false
+            ])
+            ->limit($limit)
+            ->all();
+    }
+
+    /**
+     * Установить атрибут отправки в банк
+     * @param bool $status значение статуса
+     */
+    public function setSentToBank(bool $status): void
+    {
+        $this->setAttribute('is_sent_to_bank', $status);
+
+        if ($this->save() === false) {
+            throw new \RuntimeException("Ошибка при изменении статуса отправки в банк приза ID = {$this->id}");
+        }
+    }
 }
