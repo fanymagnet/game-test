@@ -31,7 +31,7 @@ class BonusPrizes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['prize_id', 'status', 'amount'], 'required'],
+            [['prize_id', 'amount'], 'required'],
             [['prize_id', 'status'], 'default', 'value' => null],
             [['prize_id', 'status'], 'integer'],
             [['amount'], 'number'],
@@ -67,5 +67,23 @@ class BonusPrizes extends \yii\db\ActiveRecord
     public function getPrize()
     {
         return $this->hasOne(Prizes::className(), ['id' => 'prize_id']);
+    }
+
+    /**
+     * Создание случайного приза бонусные баллы
+     * @param Prizes $prize
+     * @throws \Exception
+     */
+    public static function generateRandom(Prizes $prize): void
+    {
+        $bonusPrize = new self();
+        $bonusPrize->setAttributes([
+            'prize_id' => $prize->id,
+            'amount' => random_int(Yii::$app->params['bonusPrizeFrom'], Yii::$app->params['bonusPrizeTo'])
+        ]);
+
+        if ($bonusPrize->save() === false) {
+            throw new \RuntimeException('Ошибка при сохранении приза бонусные баллы');
+        }
     }
 }

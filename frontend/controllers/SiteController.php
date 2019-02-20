@@ -1,8 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Prizes;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -66,13 +68,24 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
-     *
+     * Отобразить страницу розыгрыша с призами пользователя
      * @return mixed
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $query = Prizes::find()
+            ->where(['user_id' => Yii::$app->user->identity->id])
+            ->orderBy(['created_at' => SORT_DESC]);
+
+        $prizesDataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+            'sort' => false
+        ]);
+
+        return $this->render('index', [
+            'prizesDataProvider' => $prizesDataProvider
+        ]);
     }
 
     /**

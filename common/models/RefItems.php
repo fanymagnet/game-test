@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "ref_items".
@@ -50,5 +51,17 @@ class RefItems extends \yii\db\ActiveRecord
     public function getItemPrizes()
     {
         return $this->hasMany(ItemPrizes::className(), ['item_id' => 'id']);
+    }
+
+    /**
+     * Получить случайный предмет
+     * @return RefItems
+     */
+    public static function getRandomItem(): self
+    {
+        return self::find()
+            ->orderBy(new Expression('random()'))
+            ->limit(1)
+            ->one();
     }
 }

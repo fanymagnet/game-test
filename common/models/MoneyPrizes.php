@@ -32,7 +32,7 @@ class MoneyPrizes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['prize_id', 'status', 'amount'], 'required'],
+            [['prize_id', 'amount'], 'required'],
             [['prize_id', 'status'], 'default', 'value' => null],
             [['prize_id', 'status'], 'integer'],
             [['amount'], 'number'],
@@ -99,5 +99,25 @@ class MoneyPrizes extends \yii\db\ActiveRecord
         if ($this->save() === false) {
             throw new \RuntimeException("Ошибка при изменении статуса отправки в банк приза ID = {$this->id}");
         }
+    }
+
+    /**
+     * @param Prizes $prize
+     * @throws \Exception
+     */
+    public static function generateRandom(Prizes $prize): void
+    {
+        $moneyPrize = new self();
+        $moneyPrize->setAttributes([
+            'prize_id' => $prize->id,
+            'amount' => random_int(Yii::$app->params['moneyPrizeFrom'], Yii::$app->params['moneyPrizeTo'])
+        ]);
+
+        if ($moneyPrize->save() === false) {
+            throw new \RuntimeException('Ошибка при сохранении денежного приза');
+        }
+
+        /* Обновляем лимит оставшихся призов */
+        $prize->prizeType->updateLimit($moneyPrize->amount);
     }
 }

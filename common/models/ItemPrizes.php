@@ -32,7 +32,7 @@ class ItemPrizes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['prize_id', 'status', 'item_id'], 'required'],
+            [['prize_id', 'item_id'], 'required'],
             [['prize_id', 'status', 'item_id'], 'default', 'value' => null],
             [['prize_id', 'status', 'item_id'], 'integer'],
             [['status'], 'exist', 'skipOnError' => true, 'targetClass' => ItemPrizeStatus::className(), 'targetAttribute' => ['status' => 'id']],
@@ -76,5 +76,27 @@ class ItemPrizes extends \yii\db\ActiveRecord
     public function getItem()
     {
         return $this->hasOne(RefItems::className(), ['id' => 'item_id']);
+    }
+
+    /**
+     * Создать случайный приз физический предмет
+     * @param Prizes $prize
+     */
+    public static function generateRandom(Prizes $prize): void
+    {
+        $randomItem = RefItems::getRandomItem();
+
+        $itemPrizes = new self();
+        $itemPrizes->setAttributes([
+            'prize_id' => $prize->id,
+            'item_id' => $randomItem->id
+        ]);
+
+        if ($itemPrizes->save() === false) {
+            throw new \RuntimeException('Ошибка при сохранении приза "физ. предмет"');
+        }
+
+        /* Обновляем лимит оставшихся призов */
+        $prize->prizeType->updateLimit(1);
     }
 }
