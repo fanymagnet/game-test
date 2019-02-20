@@ -141,7 +141,10 @@ class MoneyPrizes extends \yii\db\ActiveRecord
                 break;
 
             case MoneyPrizeStatus::CONVERT_TO_BONUS:
-                $moneyPrize->convertToBonus();
+                $bonus = self::convertMoneyToBonus($moneyPrize->amount);
+                /* @var $user User */
+                $user = Yii::$app->user->identity;
+                $user->addBonus($bonus);
                 $moneyPrize->setStatus(MoneyPrizeStatus::CONVERT_TO_BONUS);
                 break;
 
@@ -168,15 +171,11 @@ class MoneyPrizes extends \yii\db\ActiveRecord
 
     /**
      * Конвертировать деньги в бонусы
+     * @param float $money
+     * @return float
      */
-    public function convertToBonus(): void
+    public static function convertMoneyToBonus(float $money): float
     {
-        /* @var $user User */
-        $user = Yii::$app->user->identity;
-        $user->bonus += $this->amount * Yii::$app->params['moneyToBonusConvertRate'];
-
-        if ($user->save() === false) {
-            throw new \RuntimeException('Ошибка при пополнении счета пользователя!');
-        }
+        return $money * Yii::$app->params['moneyToBonusConvertRate'];
     }
 }

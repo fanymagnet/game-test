@@ -187,4 +187,17 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     * Добавить пользователю бонусов
+     * @param int $bonus
+     */
+    public function addBonus(int $bonus): void
+    {
+        $this->bonus += $bonus;
+
+        if ($this->save() === false) {
+            throw new \RuntimeException('Ошибка при пополнении счета пользователя!');
+        }
+    }
 }

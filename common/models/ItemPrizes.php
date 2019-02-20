@@ -99,4 +99,43 @@ class ItemPrizes extends \yii\db\ActiveRecord
         /* Обновляем лимит оставшихся призов */
         $prize->prizeType->updateLimit(1);
     }
+
+    /**
+     * Обработка изменения статуса приза
+     * @param int $prizeId
+     * @param int $status
+     */
+    public static function processStatus(int $prizeId, int $status): void
+    {
+        $itemPrize = self::findOne(['id' => $prizeId]);
+
+        if ($itemPrize === null) {
+            throw new \RuntimeException('Приз не найден!');
+        }
+
+        switch ($status) {
+            case ItemPrizeStatus::DENIED:
+                $itemPrize->setStatus(ItemPrizeStatus::DENIED);
+                break;
+
+            case ItemPrizeStatus::MAILED:
+                $itemPrize->setStatus(ItemPrizeStatus::MAILED);
+                break;
+
+            default: throw new \RuntimeException('Неизвестный статус!');
+        }
+    }
+
+    /**
+     * Установить статус призу
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        $this->setAttribute('status', $status);
+
+        if ($this->save() === false) {
+            throw new \RuntimeException('Ошибка при изменении приза!');
+        }
+    }
 }
