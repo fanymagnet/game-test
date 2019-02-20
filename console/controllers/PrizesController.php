@@ -26,7 +26,7 @@ class PrizesController extends Controller
     }
 
     /**
-     * Начать отправку денежных прихов в банк
+     * Начать отправку денежных призов в банк
      */
     public function actionSendMoneyPrizes(): void
     {
