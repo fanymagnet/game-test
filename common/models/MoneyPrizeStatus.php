@@ -20,7 +20,7 @@ class MoneyPrizeStatus extends \yii\db\ActiveRecord
     public const DENIED = 1;
 
     /**
-     * Сконвертировано в бонусные баллы
+     * Сконвертированы в бонусные баллы
      */
     public const CONVERT_TO_BONUS = 2;
 

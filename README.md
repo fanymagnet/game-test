@@ -27,6 +27,15 @@ return [
 ];
 ```
 
+### Настройка коэффициента конвертации денег в баллы
+Для настройки коэффициента конвертации откройте файл *frontend/config/params.php* и измените опцию *moneyToBonusConvertRate*:
+```
+return [
+    ...
+    'moneyToBonusConvertRate' => 3
+    ...
+];
+```
 
 ### Настройка и запуск консольного приложения
 Для настройки количества отправляемых призов за раз измените опцию *sendMoneyPrizeLimit* в файле *console/config/params.php*:
