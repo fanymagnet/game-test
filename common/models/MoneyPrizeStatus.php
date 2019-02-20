@@ -66,4 +66,17 @@ class MoneyPrizeStatus extends \yii\db\ActiveRecord
     {
         return $this->hasMany(MoneyPrizes::className(), ['status' => 'id']);
     }
+
+    /**
+     * Опции для выпадающего списка
+     * @return array
+     */
+    public static function getSelectOptions(): array
+    {
+        return [
+            self::DENIED => 'Отказаться',
+            self::CONVERT_TO_BONUS => 'Конвертировать в бонусы',
+            self::TRANSFER_TO_BANK => 'Перевести в банк',
+        ];
+    }
 }

@@ -15,6 +15,16 @@ use Yii;
 class BonusPrizeStatus extends \yii\db\ActiveRecord
 {
     /**
+     * Отказ от приза
+     */
+    public const DENIED = 1;
+
+    /**
+     * Перевести на счет
+     */
+    public const TRANSFER_TO_ACCOUNT = 2;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -50,5 +60,17 @@ class BonusPrizeStatus extends \yii\db\ActiveRecord
     public function getBonusPrizes()
     {
         return $this->hasMany(BonusPrizes::className(), ['status' => 'id']);
+    }
+
+    /**
+     * Опции для выпадающего списка
+     * @return array
+     */
+    public static function getSelectOptions(): array
+    {
+        return [
+            self::DENIED => 'Отказаться',
+            self::TRANSFER_TO_ACCOUNT => 'Перевести на счет',
+        ];
     }
 }

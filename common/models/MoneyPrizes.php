@@ -13,7 +13,7 @@ use Yii;
  * @property double $amount Размер приза
  * @property bool $is_sent_to_bank Приз отправлен в банк
  *
- * @property MoneyPrizeStatus $status0
+ * @property MoneyPrizeStatus $prizeStatus
  * @property Prizes $prize
  */
 class MoneyPrizes extends \yii\db\ActiveRecord
@@ -59,7 +59,7 @@ class MoneyPrizes extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatus0()
+    public function getPrizeStatus()
     {
         return $this->hasOne(MoneyPrizeStatus::className(), ['id' => 'status']);
     }
@@ -97,7 +97,7 @@ class MoneyPrizes extends \yii\db\ActiveRecord
         $this->setAttribute('is_sent_to_bank', $status);
 
         if ($this->save() === false) {
-            throw new \RuntimeException("Ошибка при изменении статуса отправки в банк приза ID = {$this->id}");
+            throw new \RuntimeException("Ошибка при изменении статуса отправки в банк приза ID = {$this->id}!");
         }
     }
 
@@ -114,7 +114,7 @@ class MoneyPrizes extends \yii\db\ActiveRecord
         ]);
 
         if ($moneyPrize->save() === false) {
-            throw new \RuntimeException('Ошибка при сохранении денежного приза');
+            throw new \RuntimeException('Ошибка при сохранении денежного приза!');
         }
 
         /* Обновляем лимит оставшихся призов */

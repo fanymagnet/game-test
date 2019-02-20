@@ -4,7 +4,6 @@ namespace common\models;
 
 use Yii;
 use Throwable;
-use yii\db\Exception;
 
 /**
  * This is the model class for table "prizes".
@@ -125,9 +124,10 @@ class Prizes extends \yii\db\ActiveRecord
 
     /**
      * Генерация случайного приза для текущего пользователя
+     * @param int $userId пользователь
      * @throws Throwable
      */
-    public static function generateRandom(): void
+    public static function generateRandomPrize(int $userId): void
     {
         /* Получаем случайный тип приза */
         $randomType = PrizesTypes::getRandomType();
@@ -139,7 +139,7 @@ class Prizes extends \yii\db\ActiveRecord
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
-            $prize = self::createPrize(Yii::$app->user->identity->id, $randomType->id);
+            $prize = self::createPrize($userId, $randomType->id);
 
             switch ($prize->type) {
                 case PrizesTypes::MONEY:
@@ -165,7 +165,6 @@ class Prizes extends \yii\db\ActiveRecord
     /**
      * Получить информацию о призе
      * @return string
-     * @throws Exception
      */
     public function getInformation(): string
     {
@@ -175,12 +174,11 @@ class Prizes extends \yii\db\ActiveRecord
 
             case PrizesTypes::ITEM:
                 return "Вы выиграли: {$this->itemPrize->item->name}";
-                break;
 
             case PrizesTypes::BONUS:
                 return "Вы выиграли: {$this->bonusPrize->amount}B";
 
-            default: throw new Exception('Неизвестный тип приза!');
+            default: throw new \RuntimeException('Неизвестный тип приза!');
         }
     }
 }

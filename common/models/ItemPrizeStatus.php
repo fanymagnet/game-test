@@ -15,6 +15,17 @@ use Yii;
 class ItemPrizeStatus extends \yii\db\ActiveRecord
 {
     /**
+     * Статус отказ
+     */
+    public const DENIED = 1;
+
+    /**
+     * Статус отправлено по почте
+     */
+    public const MAILED = 2;
+
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -50,5 +61,17 @@ class ItemPrizeStatus extends \yii\db\ActiveRecord
     public function getItemPrizes()
     {
         return $this->hasMany(ItemPrizes::className(), ['status' => 'id']);
+    }
+
+    /**
+     * Опции для выпадающего списка
+     * @return array
+     */
+    public static function getSelectOptions(): array
+    {
+        return [
+            self::DENIED => 'Отказаться',
+            self::MAILED => 'Отправить по почте',
+        ];
     }
 }

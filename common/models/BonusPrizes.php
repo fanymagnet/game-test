@@ -12,7 +12,7 @@ use Yii;
  * @property int $status Текущий статус
  * @property double $amount Размер бонусов
  *
- * @property BonusPrizeStatus $status0
+ * @property BonusPrizeStatus $prizeStatus
  * @property Prizes $prize
  */
 class BonusPrizes extends \yii\db\ActiveRecord
@@ -56,7 +56,7 @@ class BonusPrizes extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatus0()
+    public function getPrizeStatus()
     {
         return $this->hasOne(BonusPrizeStatus::className(), ['id' => 'status']);
     }

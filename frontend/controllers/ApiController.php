@@ -2,9 +2,11 @@
 
 namespace frontend\controllers;
 
+use common\models\BonusPrizes;
+use common\models\ItemPrizes;
 use common\models\MoneyPrizes;
-use common\models\MoneyPrizeStatus;
 use common\models\Prizes;
+use common\models\PrizesTypes;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\Response;
@@ -49,7 +51,41 @@ class ApiController extends Controller
     public function actionGetRandomPrize(): array
     {
         try {
-            Prizes::generateRandom();
+            Prizes::generateRandomPrize(Yii::$app->user->identity->id);
+        } catch (Throwable $exception) {
+            Yii::error("Exception: {$exception->getMessage()} ({$exception->getFile()}:{$exception->getCode()})");
+            return ['success' => false];
+        }
+
+        return ['success' => true];
+    }
+
+    /**
+     * Изменение статуса приза
+     * @return array
+     */
+    public function actionChangePrizeStatus(): array
+    {
+        $prizeType = Yii::$app->request->post('dataPrizeType');
+        $prizeId = Yii::$app->request->post('dataPrizeId');
+        $status = Yii::$app->request->post('status');
+
+        try {
+            switch ($prizeType) {
+                case PrizesTypes::MONEY:
+                    MoneyPrizes::processStatus($prizeId, $status);
+                    break;
+
+                case PrizesTypes::ITEM:
+                    ItemPrizes::processStatus($prizeId, $status);
+                    break;
+
+                case PrizesTypes::BONUS:
+                    BonusPrizes::processStatus($prizeId, $status);
+                    break;
+
+                default: throw new \RuntimeException('Неизвестный тип приза!');
+            }
         } catch (Throwable $exception) {
             Yii::error("Exception: {$exception->getMessage()} ({$exception->getFile()}:{$exception->getCode()})");
             return ['success' => false];
