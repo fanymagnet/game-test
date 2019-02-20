@@ -5,5 +5,6 @@ return [
     'bonusPrizeFrom' => 1,
     'bonusPrizeTo' => 3,
     'moneyPrizeFrom' => 10,
-    'moneyPrizeTo' => 20
+    'moneyPrizeTo' => 20,
+    'moneyToBonusConvertRate' => 3
 ];

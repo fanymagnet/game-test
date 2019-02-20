@@ -73,7 +73,7 @@ $(document).ready(function () {
     /**
      * При изменении статуса приза
      */
-    $(".select-prize-status").on('change', function (e) {
+    $(document).on('change', '.select-prize-status', function (e) {
         let selectElement = $(e.target);
         let dataPrizeType = selectElement.attr('data-prize-type');
         let dataPrizeId = selectElement.attr('data-prize-id');
