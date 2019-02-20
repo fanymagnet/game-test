@@ -86,4 +86,46 @@ class BonusPrizes extends \yii\db\ActiveRecord
             throw new \RuntimeException('Ошибка при сохранении приза бонусные баллы');
         }
     }
+
+    /**
+     * Обработка изменения статуса приза
+     * @param int $prizeId
+     * @param int $status
+     */
+    public static function processStatus(int $prizeId, int $status): void
+    {
+        $bonusPrize = self::findOne(['id' => $prizeId]);
+
+        if ($bonusPrize === null) {
+            throw new \RuntimeException('Приз не найден!');
+        }
+
+        switch ($status) {
+            case BonusPrizeStatus::DENIED:
+                $bonusPrize->setStatus(BonusPrizeStatus::DENIED);
+                break;
+
+            case BonusPrizeStatus::TRANSFER_TO_ACCOUNT:
+                /* @var $user User */
+                $user = Yii::$app->user->identity;
+                $user->addBonus($bonusPrize->amount);
+                $bonusPrize->setStatus(BonusPrizeStatus::TRANSFER_TO_ACCOUNT);
+                break;
+
+            default: throw new \RuntimeException('Неизвестный статус!');
+        }
+    }
+
+    /**
+     * Установить статус призу
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        $this->setAttribute('status', $status);
+
+        if ($this->save() === false) {
+            throw new \RuntimeException('Ошибка при изменении приза!');
+        }
+    }
 }
