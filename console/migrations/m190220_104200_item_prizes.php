@@ -11,7 +11,7 @@ class m190220_104200_item_prizes extends Migration
         $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey(),
             'prize_id' => $this->integer()->notNull()->comment('Приз'),
-            'status' => $this->integer()->notNull()->comment('Текущий статус'),
+            'status' => $this->integer()->comment('Текущий статус'),
             'item_id' => $this->integer()->notNull()->comment('Предмет')
         ]);
 

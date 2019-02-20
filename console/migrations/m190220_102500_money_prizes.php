@@ -11,7 +11,7 @@ class m190220_102500_money_prizes extends Migration
         $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey(),
             'prize_id' => $this->integer()->notNull()->comment('Приз'),
-            'status' => $this->integer()->notNull()->comment('Текущий статус'),
+            'status' => $this->integer()->comment('Текущий статус'),
             'amount' => $this->float(2)->notNull()->comment('Размер приза'),
             'is_sent_to_bank' => $this->boolean()->defaultValue(false)->comment('Приз отправлен в банк')
         ]);

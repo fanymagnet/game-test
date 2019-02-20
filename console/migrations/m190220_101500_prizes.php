@@ -11,7 +11,7 @@ class m190220_101500_prizes extends Migration
         $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull()->comment('Пользователь'),
-            'type' => $this->integer()->notNull()->comment('Текущий статус'),
+            'type' => $this->integer()->notNull()->comment('Тип приза'),
             'created_at' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP')->comment('Дата выигрыша')
         ]);
 
