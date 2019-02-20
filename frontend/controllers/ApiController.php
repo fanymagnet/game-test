@@ -7,9 +7,8 @@ use common\models\ItemPrizes;
 use common\models\MoneyPrizes;
 use common\models\Prizes;
 use common\models\PrizesTypes;
-use yii\web\Controller;
-use yii\filters\AccessControl;
-use yii\web\Response;
+use yii\filters\auth\HttpBearerAuth;
+use yii\rest\Controller;
 use Throwable;
 use Yii;
 
@@ -24,24 +23,12 @@ class ApiController extends Controller
      */
     public function behaviors(): array
     {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class
         ];
-    }
 
-    public function init(): void
-    {
-        parent::init();
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $this->enableCsrfValidation = false;
+        return $behaviors;
     }
 
     /**

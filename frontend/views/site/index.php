@@ -4,7 +4,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use common\models\PrizesTypes;
 use common\models\Prizes;
-use Yii;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $prizesDataProvider \yii\data\ActiveDataProvider */
@@ -12,8 +12,13 @@ use Yii;
 $this->title = 'Розыгрыш призов!';
 
 ?>
-<div class="site-index">
 
+<script type="text/javascript">
+    const apiUrl = '<?= Url::to(['/api']) ?>';
+    const authToken = '<?= Yii::$app->user->identity->getAuthKey() ?>';
+</script>
+
+<div class="site-index">
     <div class="jumbotron">
         <p>
             <button class="btn btn-lg btn-success" id="get-random-prize">Получить приз</button>

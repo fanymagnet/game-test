@@ -12,12 +12,12 @@ $(document).ready(function () {
      */
     function apiRequest(functionName, functionData, method, callBackSuccess, callBackError) {
         $.ajax({
-            url: '/api/' + functionName,
+            url: apiUrl + '/' + functionName,
             data: functionData,
             method: method,
-            // beforeSend: function (data) {
-            //      data.setRequestHeader("Authorization", "Bearer qwerty");
-            // },
+            beforeSend: function (data) {
+                 data.setRequestHeader("Authorization", "Bearer " + authToken);
+            },
             success: function (data) {
                 if (data.success === true) {
                     callBackSuccess.call(data);
