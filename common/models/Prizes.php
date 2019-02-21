@@ -181,4 +181,39 @@ class Prizes extends \yii\db\ActiveRecord
             default: throw new \RuntimeException('Неизвестный тип приза!');
         }
     }
+
+    /**
+     * Обрабработка изменения статуса приза
+     * @param int $prizeType
+     * @param int $prizeId
+     * @param int $status
+     * @throws Throwable
+     */
+    public static function changeStatusPrize(int $prizeType, int $prizeId, int $status): void
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            switch ($prizeType) {
+                case PrizesTypes::MONEY:
+                    MoneyPrizes::processStatus($prizeId, $status);
+                    break;
+
+                case PrizesTypes::ITEM:
+                    ItemPrizes::processStatus($prizeId, $status);
+                    break;
+
+                case PrizesTypes::BONUS:
+                    BonusPrizes::processStatus($prizeId, $status);
+                    break;
+
+                default: throw new \RuntimeException('Неизвестный тип приза!');
+            }
+
+            $transaction->commit();
+        } catch (Throwable $exception) {
+            $transaction->rollBack();
+            throw $exception;
+        }
+    }
 }
