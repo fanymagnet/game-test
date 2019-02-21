@@ -58,3 +58,6 @@ php yii prizes/send-money-prizes
 ```
 vendor/bin/codecept run common/tests/unit/models/MoneyPrizeTest.php
 ```
+
+### Схема базы данных
+![alt text](docs/db.png "Схема БД")
