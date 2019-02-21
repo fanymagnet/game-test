@@ -52,3 +52,9 @@ return [
 ```
 php yii prizes/send-money-prizes
 ```
+
+### Тестирование конвертации денег в бонусы
+Для выполнения теста запустите команду из папки приложения:
+```
+vendor/bin/codecept run common/tests/unit/models/MoneyPrizeTest.php
+```

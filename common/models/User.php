@@ -54,6 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['bonus', 'number']
         ];
     }
 
@@ -190,9 +191,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Добавить пользователю бонусов
-     * @param int $bonus
+     * @param float $bonus
      */
-    public function addBonus(int $bonus): void
+    public function addBonus(float $bonus): void
     {
         $this->bonus += $bonus;
 
